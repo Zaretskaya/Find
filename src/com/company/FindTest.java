@@ -2,42 +2,33 @@ package com.company;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class FindTest {
-
-    private static void assertFileContent(String name, String expectedContent) {
-        StringBuilder content = new StringBuilder();
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(name));
-            String curr;
-            while ((curr = br.readLine()) != null) {
-                content.append(curr);
-                content.append("\n");
-            }
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
-        int length = content.length();
-        if (length > 0) content.deleteCharAt(length - 1);
-        assertEquals(expectedContent, content.toString());
-
-    }
-
-
-
-
+    private FileFinder finder = new FileFinder();
 
     @Test
-    void main() throws Exception {
-        String[] arg = {"find ", "-r ", " test.txt"};
-        Find.main(arg);
-        assertFileContent("output.txt", "exp.txt");
+    void testNonRecursiveWithoutDir() throws Exception {
+        final String[] args = {"find", "test.txt"};
+        assertEquals(finder.find(args).size(), 1);
     }
 
+    @Test
+    void testRecursiveWithoutDir() throws Exception {
+        final String[] args = {"find", "-r", "test.txt"};
+        assertEquals(finder.find(args).size(), 2);
+    }
+
+    @Test
+    void testRecursiveWithDir() throws Exception {
+        final String[] args = {"find", "-r", "-d", "testdir", "test.txt"};
+        assertEquals(finder.find(args).size(), 1);
+    }
+
+    @Test
+    void testNonRecursiveWithDir() throws Exception {
+        final String[] args = {"find", "-d", "testdir", "test.txt"};
+        assertEquals(finder.find(args).size(), 1);
+    }
 }
