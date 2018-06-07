@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class FindTest {
-    private FileFinder finder = new FileFinder();
+    private Finder finder = new Finder();
 
     @Test
     void testNonRecursiveWithoutDir() throws Exception {
